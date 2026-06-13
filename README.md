@@ -3,4 +3,4 @@
 -Express
 -PostgreSQL
 -Prisma
--Python
+-JavaScript
