@@ -1,25 +1,26 @@
-let students = [
-    { firstName: "John", lastName: "Smith", id: 1 },
-    { firstName: "Emma", lastName: "Johnson", id: 2 },
-    { firstName: "Michael", lastName: "Brown", id: 3 },
-    { firstName: "Olivia", lastName: "Davis", id: 4 },
-    { firstName: "Erik", lastName: "Vasquez", id: 5 }
-];
+
+const database = require("../data/database")
+
 
 exports.getAllStudents = (req, res) => {
-    res.json(students);
+    res.json({
+        students: database.students
+    });
 };
 
 exports.getStudentById = (req,res) => {
-    const id = req.params.id;
-    let studentX;
+    const id = Number(req.params.id);
+    const actuallStudent = database.students.find(student => student.id === id);
 
-    for (let i = 0; i< students.length; i++) {
-        if (students[i].id == id) {
-            studentX = students[i]
-        }
+    if (!actuallStudent) {
+        return res.status(404).json({
+            message: "Student with id: " + id + " was not found"
+        })
     }
-    res.json(studentX.firstName + " " + studentX.lastName)
+    
+    res.json({
+        student: actuallStudent.firstName + " " + actuallStudent.lastName
+    })
 }
 
 exports.addStudent = (req, res) => {
@@ -27,12 +28,30 @@ exports.addStudent = (req, res) => {
     const lastName = req.body.lastName
 
     const newStudent = {
-        id: students.length + 1,
+        id: database.students.length + 1,
         firstName: firstName,
         lastName: lastName
     }
 
-    students.push(newStudent);
+    database.students.push(newStudent);
 
     res.json(newStudent)
+}
+
+exports.deleteStudent = (req,res) => {
+    const id = Number(req.params.id) // Number() turns id into a real Number
+    const actualStudent = database.students.find(student => student.id === id);
+
+    if (!actualStudent) {
+        return res.status(404).json({
+            message : "Studen not found" // message sendet message an frontend bzw postman  kann man selst auswöhlen 
+        })
+    }
+
+    database.students = database.students.filter(student => student.id !== id);
+
+    res.json({
+        message: actualStudent.firstName + " " + actualStudent.lastName + " was removed",
+        students: database.students
+    })
 }
