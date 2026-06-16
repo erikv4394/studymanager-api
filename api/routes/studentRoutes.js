@@ -13,7 +13,7 @@ const studentController = require("../controller/studentController.js")
 
 router.get("/",studentController.getAllStudents);
 router.get("/:id",studentController.getStudentById);
-router.post("/addStudent",studentController.addStudent);
-router.delete("/removeStudent/:id",studentController.deleteStudent);
+router.post("/",studentController.addStudent);
+router.delete("/:id",studentController.deleteStudent);
 
 module.exports = router;

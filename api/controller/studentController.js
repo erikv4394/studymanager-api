@@ -1,57 +1,62 @@
-
-const database = require("../data/database")
-
+const studentRepository = require("../repositories/studentRepository");
 
 exports.getAllStudents = (req, res) => {
+    const students = studentRepository.findAllStudents();
+
     res.json({
-        students: database.students
+        students: students
     });
 };
 
-exports.getStudentById = (req,res) => {
+exports.getStudentById = (req, res) => {
     const id = Number(req.params.id);
-    const actuallStudent = database.students.find(student => student.id === id);
 
-    if (!actuallStudent) {
-        return res.status(404).json({
-            message: "Student with id: " + id + " was not found"
-        })
-    }
-    
-    res.json({
-        student: actuallStudent.firstName + " " + actuallStudent.lastName
-    })
-}
-
-exports.addStudent = (req, res) => {
-    const firstName = req.body.firstName
-    const lastName = req.body.lastName
-
-    const newStudent = {
-        id: database.students.length + 1,
-        firstName: firstName,
-        lastName: lastName
-    }
-
-    database.students.push(newStudent);
-
-    res.json(newStudent)
-}
-
-exports.deleteStudent = (req,res) => {
-    const id = Number(req.params.id) // Number() turns id into a real Number
-    const actualStudent = database.students.find(student => student.id === id);
+    const actualStudent = studentRepository.findStudentById(id);
 
     if (!actualStudent) {
         return res.status(404).json({
-            message : "Studen not found" // message sendet message an frontend bzw postman  kann man selst auswöhlen 
-        })
+            message: "Student with id: " + id + " was not found"
+        });
     }
 
-    database.students = database.students.filter(student => student.id !== id);
+    res.json({
+        student: actualStudent
+    });
+};
+
+exports.addStudent = (req, res) => {
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+
+    if (!firstName || !lastName) {
+        return res.status(400).json({
+            message: "firstName and lastName are required"
+        });
+    }
+
+    const newStudent = studentRepository.addStudent(firstName, lastName);
+
+    res.status(201).json({
+        message: "Student was created successfully",
+        student: newStudent
+    });
+};
+
+exports.deleteStudent = (req, res) => {
+    const id = Number(req.params.id);
+
+    const deletedStudent = studentRepository.deleteStudent(id);
+
+    if (!deletedStudent) {
+        return res.status(404).json({
+            message: "Student not found"
+        });
+    }
 
     res.json({
-        message: actualStudent.firstName + " " + actualStudent.lastName + " was removed",
-        students: database.students
-    })
-}
+        message: deletedStudent.firstName + " " + deletedStudent.lastName + " was removed",
+        student: deletedStudent,
+        students: studentRepository.findAllStudents()
+    });
+};
+

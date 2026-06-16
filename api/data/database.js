@@ -19,11 +19,15 @@ let courses = [
     { id: 10, name: "Mobile App Entwicklung", ects: 5 }
 ];
 
-let studentCourses = [];
+let degreePrograms = [
+    { id: 1, name: "Informatik Bachelor", totalEcts: 180 },
+    { id: 2, name: "Wirtschaftsinformatik Bachelor", totalEcts: 180 },
+    { id: 3, name: "Data Science Master", totalEcts: 120 }
+];
 
 // Module exports bestimmt was eine JavaScript datei nach Außen gibt damit eine andere Datei es mit require benuitzuen kann 
 module.exports = {
     students,
     courses,
-    studentCourses
+    degreePrograms
 };

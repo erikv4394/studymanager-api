@@ -1,0 +1,39 @@
+const database = require("../data/database.js");
+
+exports.findAllStudents = () => {
+    return database.students;
+};
+
+exports.findStudentById = (id) => {
+    return database.students.find(student => student.id === id);
+};
+
+exports.addStudent = (firstName, lastName) => {
+    const newId = database.students.length > 0
+        ? Math.max(...database.students.map(student => student.id)) + 1
+        : 1;
+
+    const newStudent = {
+        id: newId,
+        firstName: firstName,
+        lastName: lastName
+    };
+
+    database.students.push(newStudent);
+
+    return newStudent;
+};
+
+exports.deleteStudent = (id) => {
+    const studentIndex = database.students.findIndex(student => student.id === id);
+
+    if (studentIndex === -1) {
+        return null;
+    }
+
+    const deletedStudent = database.students[studentIndex];
+
+    database.students.splice(studentIndex, 1);
+
+    return deletedStudent;
+};
