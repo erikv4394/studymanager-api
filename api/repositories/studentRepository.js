@@ -37,3 +37,15 @@ exports.deleteStudent = (id) => {
 
     return deletedStudent;
 };
+
+exports.getStudentDegreeProgramm = (id) => {
+    const student = database.students.find(student => student.id === Number(id));
+    const degreeProgramId = student.degreeProgramID;
+
+    if (!student) {
+        return null;
+    }
+
+
+    return database.degreePrograms.find(degreeProgramm => degreeProgramm.id === degreeProgramId);
+}

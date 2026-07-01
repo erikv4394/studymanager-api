@@ -60,3 +60,12 @@ exports.deleteStudent = (req, res) => {
     });
 };
 
+exports.getStudentDegreeProgramm = (req, res) => {
+    const studentId = Number(req.params.id)
+    const degreeProgram = studentRepository.getStudentDegreeProgramm(studentId)
+
+    res.json({
+        degreeProgram
+    })
+}
+
