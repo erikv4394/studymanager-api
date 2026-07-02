@@ -37,3 +37,26 @@ exports.deleteDegreeProgram = (req, res) => {
     })
 
 }
+
+exports.getDegreeProgramById = (req, res) => {
+    const id = Number(req.params.id);
+
+    if (!id) {
+        return res.status(400).json({
+            message: "id is missing"
+        })
+    }
+
+    const degreeProgram = degreeProgramRepository.getDegreeProgramById(id);
+
+    if (degreeProgram == null) {
+        return res.status(404).json({
+            message: "degree program not found"
+        });
+    }
+
+    return res.json({
+        degreeProgram: degreeProgram
+    })
+
+}

@@ -69,3 +69,27 @@ exports.getStudentDegreeProgramm = (req, res) => {
     })
 }
 
+exports.assignStudentToDegreeProgram = (req, res) => {
+    const studentID = Number(req.params.studentID);
+    const degreeProgramID = Number(req.params.degreeProgramID);
+    
+
+    if (!studentID) {
+        return res.status(404).json({
+            message: "Student with " + studentID + "was not found"
+        })
+    } else if (!degreeProgramID) {
+        return res.status(404).json({
+            message: "DegreeProgram with " + degreeProgramID + "was not found"
+        })
+    }
+
+    studentRepository.assignStudentToDegreeProgram(studentID, degreeProgramID);
+
+    const actualStudent = studentRepository.findStudentById(studentID);
+
+    return res.json({
+        student: actualStudent
+    })
+}
+

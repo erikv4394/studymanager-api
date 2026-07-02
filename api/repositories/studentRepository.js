@@ -49,3 +49,14 @@ exports.getStudentDegreeProgramm = (id) => {
 
     return database.degreePrograms.find(degreeProgramm => degreeProgramm.id === degreeProgramId);
 }
+
+exports.assignStudentToDegreeProgram = (studentID, degreeProgramID) => {
+    const student = database.students.find(student => student.id === Number(studentID));
+    const degreeProgram = database.degreePrograms.find(degreeProgram => degreeProgram.id === Number(degreeProgramID));
+
+    if (!student || !degreeProgram) return null;
+
+    student.degreeProgramID = degreeProgram.id
+
+    return student;
+}

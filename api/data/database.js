@@ -1,5 +1,3 @@
-const { deleteDegreeProgramm } = require("../repositories/degreeProgramRepository");
-
 let students = [
     { firstName: "John", lastName: "Smith", id: 1, degreeProgramID:1 },
     { firstName: "Emma", lastName: "Johnson", id: 2, degreeProgramID: 1 },
@@ -26,10 +24,6 @@ let degreePrograms = [
     { id: 2, name: "Wirtschaftsinformatik Bachelor", totalEcts: 180 },
     { id: 3, name: "Data Science Master", totalEcts: 120 }
 ];
-
-let studentDegreePrograms = [
-    { studentId: 1, degreeProrammId: 1 }
-]
 
 // Module exports bestimmt was eine JavaScript datei nach Außen gibt damit eine andere Datei es mit require benuitzuen kann 
 module.exports = {

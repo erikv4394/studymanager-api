@@ -33,3 +33,11 @@ exports.deleteDegreeProgramm = (id) => {
 
     return deletedDegreeProgram
 }
+
+exports.getDegreeProgramById = (id) => {
+    const degreeProgram = database.degreePrograms.find(degreeProgram => degreeProgram.id === Number(id));
+
+    if (degreeProgram == null) return null;
+
+    return degreeProgram;
+}

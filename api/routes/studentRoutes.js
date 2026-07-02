@@ -9,11 +9,13 @@
 const express = require("express");
 const router = express.Router();
 
-const studentController = require("../controller/studentController.js")
+const studentController = require("../controller/studentController.js");
+const { assignStudentToDegreeProgram } = require("../repositories/studentRepository.js");
 
 router.get("/",studentController.getAllStudents);
 router.get("/:id",studentController.getStudentById);
 router.get("/:id/degree-program",studentController.getStudentDegreeProgramm);
 router.post("/",studentController.addStudent);
 router.delete("/:id",studentController.deleteStudent)
+router.put("/:studentID/degree-program/:degreeProgramID", studentController.assignStudentToDegreeProgram)
 module.exports = router;
