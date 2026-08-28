@@ -1,14 +1,226 @@
-const database = require("../data/database")
+const courseRepository = require("../repositories/courseRepository");
+
 
 exports.getAllCourses = (req, res) => {
-    const courses = database.courses
 
-    if(courses.length == 0) {
-        return res.status(400).json({
-            message: "not courses availabe"
-        })
-    }
+    const courses = courseRepository.getAllCourses();
+
     res.json({
-        courses: database.courses
-    })
-}
+        courses: courses
+    });
+};
+
+
+exports.getCourseById = (req, res) => {
+
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({
+            message: "Invalid course id"
+        });
+    }
+
+    const course = courseRepository.getCourseById(id);
+
+    if (!course) {
+        return res.status(404).json({
+            message: "Course with id " + id + " was not found"
+        });
+    }
+
+    res.json({
+        course: course
+    });
+};
+
+
+exports.addCourse = (req, res) => {
+
+    const {
+        name,
+        ects,
+        semester,
+        degreeProgramID,
+        type
+    } = req.body;
+
+
+    if (!name || ects === undefined || semester === undefined || !degreeProgramID || !type) {
+        return res.status(400).json({
+            message: "name, ects, semester, degreeProgramID and type are required"
+        });
+    }
+
+
+    if (typeof name !== "string" || name.trim() === "") {
+        return res.status(400).json({
+            message: "name must be a non-empty string"
+        });
+    }
+
+
+    if (typeof ects !== "number" || ects <= 0) {
+        return res.status(400).json({
+            message: "ects must be a positive number"
+        });
+    }
+
+
+    if (!Number.isInteger(semester) || semester <= 0) {
+        return res.status(400).json({
+            message: "semester must be a positive integer"
+        });
+    }
+
+
+    if (!Number.isInteger(degreeProgramID) || degreeProgramID <= 0) {
+        return res.status(400).json({
+            message: "degreeProgramID must be a positive integer"
+        });
+    }
+
+
+    const validTypes = [
+        "MANDATORY",
+        "ELECTIVE",
+        "VOLUNTARY"
+    ];
+
+    if (!validTypes.includes(type)) {
+        return res.status(400).json({
+            message: "type must be MANDATORY, ELECTIVE or VOLUNTARY"
+        });
+    }
+
+
+    const newCourse = courseRepository.addCourse(
+        name,
+        ects,
+        semester,
+        degreeProgramID,
+        type
+    );
+
+
+    res.status(201).json({
+        message: "Course was created successfully",
+        course: newCourse
+    });
+};
+
+
+exports.updateCourse = (req, res) => {
+
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({
+            message: "Invalid course id"
+        });
+    }
+
+    const {
+        name,
+        ects,
+        semester,
+        degreeProgramID,
+        type
+    } = req.body;
+
+
+    if (!name || ects === undefined || semester === undefined || !degreeProgramID || !type) {
+        return res.status(400).json({
+            message: "name, ects, semester, degreeProgramID and type are required"
+        });
+    }
+
+
+    const validTypes = [
+        "MANDATORY",
+        "ELECTIVE",
+        "VOLUNTARY"
+    ];
+
+    if (!validTypes.includes(type)) {
+        return res.status(400).json({
+            message: "type must be MANDATORY, ELECTIVE or VOLUNTARY"
+        });
+    }
+
+
+    const updatedCourse = courseRepository.updateCourse(
+        id,
+        name,
+        ects,
+        semester,
+        degreeProgramID,
+        type
+    );
+
+
+    if (!updatedCourse) {
+        return res.status(404).json({
+            message: "Course with id " + id + " was not found"
+        });
+    }
+
+
+    res.json({
+        message: "Course was updated successfully",
+        course: updatedCourse
+    });
+};
+
+
+exports.deleteCourse = (req, res) => {
+
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({
+            message: "Invalid course id"
+        });
+    }
+
+    const deletedCourse = courseRepository.deleteCourse(id);
+
+    if (!deletedCourse) {
+        return res.status(404).json({
+            message: "Course with id " + id + " was not found"
+        });
+    }
+
+    res.json({
+        message: "Course was deleted successfully",
+        course: deletedCourse
+    });
+};
+
+
+exports.getCoursesByDegreeProgram = (req, res) => {
+
+    const degreeProgramID = Number(req.params.degreeProgramID);
+    const semester = req.query.semester;
+
+    if (!Number.isInteger(degreeProgramID)) {
+        return res.status(400).json({
+            message: "Invalid degree program id"
+        });
+    }
+
+    if (semester !== undefined && !Number.isInteger(Number(semester))) {
+        return res.status(400).json({
+            message: "Invalid semester"
+        });
+    }
+
+    const courses = courseRepository.getCoursesByDegreeProgram(
+        degreeProgramID,
+        semester
+    );
+
+    res.json({
+        courses: courses
+    });
+};
