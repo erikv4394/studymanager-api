@@ -139,6 +139,12 @@ let degreePrograms = [
     { id: 3, name: "Data Science Master", totalEcts: 120 }
 ];
 
+let enrollments = [
+    { studentId: 1, courseId: 1, status: "PLANNED"},
+    { studentId: 2, courseId: 1, status: "PLANNED"},
+    { studentId: 3, courseId: 1, status: "PLANNED"},
+]
+
 
 // Module exports bestimmt was eine JavaScript datei nach Außen gibt damit eine andere Datei es mit require benuitzuen kann 
 module.exports = {
