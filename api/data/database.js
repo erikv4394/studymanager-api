@@ -141,6 +141,8 @@ let degreePrograms = [
 
 let enrollments = [
     { studentId: 1, courseId: 1, status: "PLANNED"},
+    { studentId: 1, courseId: 2, status: "PLANNED"},
+    { studentId: 1, courseId: 3, status: "PLANNED"},
     { studentId: 2, courseId: 1, status: "PLANNED"},
     { studentId: 3, courseId: 1, status: "PLANNED"},
 ]
@@ -150,5 +152,6 @@ let enrollments = [
 module.exports = {
     students,
     courses,
-    degreePrograms
+    degreePrograms,
+    enrollments
 };
