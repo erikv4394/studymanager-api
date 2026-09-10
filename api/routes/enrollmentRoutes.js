@@ -12,6 +12,8 @@ router.post(
 
 router.get("/students/:studentId/enrollments", enrollmentController.getStudentEnrollments)
 
+router.get("/students/:studentId/enrollments/finished", enrollmentController.getStudentFinishedCourses)
+
 
 module.exports = router;
 

@@ -53,3 +53,27 @@ exports.getStudentEnrollments = (req, res) => {
         enrollments: studentEnrollments
     })
 }
+
+exports.getStudentFinishedCourses = (req, res) => {
+    const studentId = Number(req.params.studentId)
+
+    const student = studentRepository.findStudentById(studentId)
+
+    if (!student) {
+        return res.status(404).json({
+            message: "Student with id " + studentId + "was not found"
+        });
+    }
+
+    const StudentFinishedEnrollments = enrollmentRepository.getStudentFinishedCourses(studentId);
+
+    if (StudentFinishedEnrollments.length === 0) {
+        return res.status(404).json({
+            message: "Student with id " + studentId + " has no completed courses"
+        })
+    }
+
+    return res.json({
+        finishesCourses : StudentFinishedEnrollments
+    })
+}

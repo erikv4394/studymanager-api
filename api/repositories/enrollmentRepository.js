@@ -31,3 +31,26 @@ exports.getStudentsEnrollments = (studentId) => {
     return studentCourses
     
 }
+
+exports.getStudentFinishedCourses = (studentId) => {
+    const enrollments = database.enrollments;
+    const courses = database.courses;
+
+    const studentEnrollments = enrollments.filter(
+        (enrollment) => enrollment.studentId == studentId
+    )
+
+    const StudentFinishedEnrollments = studentEnrollments.filter(
+        (enrollment) => enrollment.status == "FINISHED"
+    )
+
+     const studentCoursesId = StudentFinishedEnrollments.map(
+        (enrollment) => enrollment.courseId
+    );
+
+    const studentCourses = courses.filter((course) =>
+        studentCoursesId.includes(course.id)
+    );
+
+    return studentCourses
+}
